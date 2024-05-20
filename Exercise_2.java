@@ -158,6 +158,5 @@ public class Exercise_2 {
 
     String message = player.IsOverweight() ? "You still have plenty of inventory space" : "You are overloaded!";
     System.out.println(message);
-
   }
 }
