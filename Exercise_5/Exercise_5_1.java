@@ -1,71 +1,113 @@
 // Три простых класса
 class Weapon {
-  private String name;
-  private int maxDamage;
-  private int weight;
-  private int level;
-  private int ammo;
-
-  Weapon(String name, int maxDamage, int weight, int level, int ammo) {
-    this.name = name;
-    this.maxDamage = maxDamage;
-    this.weight = weight;
-    this.level = level;
-    this.ammo = ammo;
-  }
+  private String name = "Gun";
+  private int maxDamage = 10;
+  private int weight = 5;
+  private int ammo = 8;
 
   public void setName(String newName) {
-    this.name = newName;
+    if (!newName.isEmpty())
+      this.name = newName;
+    else
+      System.out.println("The specified name cannot be empty. The default name is used.");
   }
 
-  public int getMaxDamage() {
-    return this.maxDamage;
+  public String getName() {
+    return this.name;
+  }
+
+  public void setMaxDamage(int newMaxDamage) {
+    if (newMaxDamage <= 1)
+      this.maxDamage = 1;
+    else
+      this.maxDamage = newMaxDamage;
   }
 
   public int getWeight() {
     return this.weight;
   }
 
-  public void setMaxDamage(int newMaxDamage) {
-    this.maxDamage = newMaxDamage;
+  public void setWeight(int newWeight) {
+    if (newWeight <= 0) {
+      System.out.println("The weight can't be less and is equal to zero.");
+      return;
+    }
+      
+    this.weight = newWeight;
   }
 
-  public void setLevel(int newLevel) {
-    this.level = newLevel;
-  }
-
-  public int getAmmoCount() {
-    return this.ammo;
+  public void setAmmoCount(int newAmmo) {
+    if (newAmmo < 0) {
+      System.out.println("The amount of ammo can't be less than zero.");
+      return;
+    }
+      
+    this.ammo = newAmmo;
   }
 
   public void shoot() {
-    this.ammo -= 1;
+    if (this.ammo > 0)
+      this.ammo -= 1;
+    else
+      System.out.println("Ammo ran out!");
   }
 }
 
 class Armor {
-  private String name;
-  private int durability;
-  private int weight;
-  private int level;
-
-  Armor(String name, int durability, int weight, int level) {
-    this.name = name;
-    this.durability = durability;
-    this.weight = weight;
-    this.level = level;
-  }
+  private String name = "Default Armor";
+  private int durability = 10;
+  private int weight = 5;
 
   public void setName(String newName) {
-    this.name = newName;
+    if (!newName.isEmpty())
+      this.name = newName;
+    else
+      System.out.println("The specified name cannot be empty. The default name is used.");
   }
 
-  public int getDurability() {
-    return this.durability;
+  public String getName() {
+    return this.name;
+  }
+
+  public void setDurability(int newDurability) {
+    if (newDurability <= 1)
+      this.durability = 1;
+    else
+      this.durability = newDurability;
   }
 
   public int getWeight() {
     return this.weight;
+  }
+
+  public void setWeight(int newWeight) {
+    if (newWeight <= 0) {
+      System.out.println("The weight can't be less and is equal to zero.");
+      return;
+    }
+
+    this.weight = newWeight;
+  }
+}
+
+class Player {
+  private String name = "Nameless";
+  private int health = 100;
+  private int stamina = 100;
+  private int maxWeight = 50;
+  private int level = 1;
+  private Weapon weapon = null;
+  private Armor armor = null;
+
+  public void setName(String newName) {
+    if (!newName.isEmpty())
+      this.name = newName;
+    else
+      System.out.println("The specified name cannot be empty. The default name is used.");
+  }
+
+  public String getName() {
+    return this.name;
   }
 
   public int getLevel() {
@@ -75,50 +117,58 @@ class Armor {
   public void setLevel(int newLevel) {
     this.level = newLevel;
   }
-}
 
-class Player {
-  private String name;
-  private int health;
-  private int stamina;
-  private int maxWeight;
-  private int experience;
-  private Weapon weapon;
-  private Armor armor;
-
-  Player(String name, int health, int stamina, int maxWeight, int experience, Weapon weapon, Armor armor) {
-    this.name = name;
-    this.health = health;
-    this.stamina = stamina;
-    this.maxWeight = maxWeight;
-    this.experience = experience;
-    this.weapon = weapon;
-    this.armor = armor;
+  public void setWeapon(Weapon newWeapon) {
+    this.weapon = newWeapon;
   }
 
-  public void setName(String newName) {
-    this.name = newName;
+  public void setArmor(Armor newArmor) {
+    this.armor = newArmor;
   }
 
   public void run() {
-    this.stamina -= 1;
+    if (this.stamina > 0) {
+      this.stamina -= 1;
+    } else {
+      System.out.println("You're tired out!");
+    }
   }
 
   public void shoot() {
-    weapon.shoot();
+    if (this.weapon != null) {
+      this.weapon.shoot();
+    } else {
+      System.out.println("You don't have a weapon!");
+    }
   }
 
   public boolean IsOverweight() {
-    return (this.maxWeight <= (this.weapon.getWeight() + this.armor.getWeight()));
+    if (this.weapon == null || this.armor == null)
+      return false;
+
+    return this.maxWeight <= (this.weapon.getWeight() + this.armor.getWeight());
   }
 }
 
 public class Exercise_5_1 {
   public static void main(String[] args) {
-    // Создание экземпляров классов (объектов) и иницализация полей (с помощью конструкторов)
-    Weapon weapon = new Weapon("Shotgun", 15, 3, 1, 10);
-    Armor armor = new Armor("Leather armor", 12, 7, 1);
-    Player player = new Player("Jack", 100, 100, 50, 10, weapon, armor);
+    // Создание экземпляров классов (объектов) и иницализация полей
+    Weapon weapon = new Weapon();
+    weapon.setName("Shotgun");
+    weapon.setMaxDamage(15);
+    weapon.setWeight(3);
+    weapon.setAmmoCount(10);
+
+    Armor armor = new Armor();
+    armor.setName("Leather armor");
+    armor.setDurability(12);
+    armor.setWeight(7);
+
+    Player player = new Player();
+    player.setName("Jack");
+    player.setLevel(10);
+    player.setWeapon(weapon);
+    player.setArmor(armor);
 
     String overweightMessage = player.IsOverweight() ? "You have too many things!" : "You still have enough space.";
     System.out.println(overweightMessage);
