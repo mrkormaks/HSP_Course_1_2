@@ -173,7 +173,7 @@ class Player {
   }
 }
 
-public class Exercise_5_1 {
+public class Exercise_5_2 {
   public static void main(String[] args) {
     // Создание экземпляров классов (объектов) и иницализация полей (с помощью конструкторов)
     Weapon weapon = new Weapon("Shotgun", 15, 3, 10);
