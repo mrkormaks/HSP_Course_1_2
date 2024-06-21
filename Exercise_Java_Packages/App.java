@@ -1,33 +1,43 @@
 import java.util.Scanner;
+import java.util.logging.Logger;
 import mathoperations.MathUtils;
 import converter.HexConverter;
 
 public class App {
+  private static final Logger logger = Logger.getLogger(App.class.getName());
+
   public static void main(String[] args) {
+    logger.info("Application started");
+
     Scanner in = new Scanner(System.in);
     System.out.println("Введите любое число: ");
     int number = in.nextInt();
+    logger.info("User entered number: " + number);
 
     // Проверка числа на четность
     boolean isEven = MathUtils.isEven(number);
     if (isEven) {
-      System.out.println("Your number is even.");
+      logger.info("Number is even");
     } else {
-      System.out.println("Your number is odd.");
+      logger.info("Number is odd");
     }
 
     // Используем метод из класса MathUtils для возведения в квадрат
     int squaredNumber = MathUtils.squareInt(number);
-    System.out.println("Your number squared: " + squaredNumber);
+    logger.info("Number squared: " + squaredNumber);
 
     // Используем метод из класса HexConverter для перевода в шестнадцатеричное представление
     String hexNumber = HexConverter.decToHex(number);
-    System.out.println("Your number in hexadecimal: " + hexNumber);
-    
+    logger.info("Number in hexadecimal: " + hexNumber);
+
     // Используем метод из HexConverter, который включает использование MathUtils
     String hexNumberDirect = HexConverter.squareIntToHex(number);
-    System.out.println("Your number squared and converted to hexadecimal directly: " + hexNumberDirect);
+    logger.info("Number squared and converted to hexadecimal: " + hexNumberDirect);
+
+    // Ассерт для проверки корректности работы метода squareInt
+    assert squaredNumber == number * number : "squareInt method failed";
 
     in.close();
+    logger.info("Application finished");
   }
 }
