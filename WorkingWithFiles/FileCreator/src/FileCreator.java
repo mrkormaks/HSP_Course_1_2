@@ -16,7 +16,7 @@ public class FileCreator {
           bw.newLine();
         }
       } catch (IOException e) {
-        System.out.println("An error occurred while writing to file " + file.getName());
+        System.out.println("Ошибка записи файла " + file.getName());
         e.printStackTrace();
       }
     }
