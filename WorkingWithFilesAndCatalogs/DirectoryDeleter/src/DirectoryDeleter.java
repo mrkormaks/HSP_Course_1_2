@@ -65,12 +65,12 @@ public class DirectoryDeleter {
       Files.createDirectory(emptyDir);
 
       // Создание директории с подкаталогами и файлами
-      Path FullDirectory = Paths.get("FullDirectory");
-      Files.createDirectory(FullDirectory);
-      Files.createDirectory(FullDirectory.resolve("subDirectory1"));
-      Files.createDirectory(FullDirectory.resolve("subDirectory2"));
-      Files.createFile(FullDirectory.resolve("file1.txt"));
-      Files.createFile(FullDirectory.resolve("file2.txt"));
+      Path fullDirectory = Paths.get("FullDirectory");
+      Files.createDirectory(fullDirectory);
+      Files.createDirectory(fullDirectory.resolve("subDirectory1"));
+      Files.createDirectory(fullDirectory.resolve("subDirectory2"));
+      Files.createFile(fullDirectory.resolve("file1.txt"));
+      Files.createFile(fullDirectory.resolve("file2.txt"));
 
       // Создание директории с файлами, но без подкаталогов
       Path filesOnlyDir = Paths.get("FilesOnlyDirectory");
@@ -80,15 +80,15 @@ public class DirectoryDeleter {
 
       // Применение метода удаления к пустой директории
       boolean result1 = deleteDirectoryAndFiles("EmptyDirectory");
-      System.out.println("Deletion of empty directory " + (result1 ? "successful" : "failed"));
+      System.out.println("Удаление пустого каталога " + (result1 ? "успешно" : "не удалось"));
 
       // Применение метода удаления к директории с подкаталогами и файлами
       boolean result2 = deleteDirectoryAndFiles("FullDirectory");
-      System.out.println("Deletion of parent directory " + (result2 ? "successful" : "failed"));
+      System.out.println("Удаление каталога с файлами и подкаталогами " + (result2 ? "успешно" : "не удалось"));
 
       // Применение метода удаления к директории с файлами, но без подкаталогов
       boolean result3 = deleteDirectoryAndFiles("FilesOnlyDirectory");
-      System.out.println("Deletion of files-only directory " + (result3 ? "successful" : "failed"));
+      System.out.println("Удаление каталога с файлами " + (result3 ? "успешно" : "не удалось"));
     } catch (IOException e) {
       e.printStackTrace();
     }
