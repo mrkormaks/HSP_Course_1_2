@@ -6,7 +6,7 @@
 ![image](https://github.com/user-attachments/assets/0a3467a7-1bbc-48be-b933-07ffb9f9492e)
 ### Доска задач проекта ###
 ![image](https://github.com/user-attachments/assets/c272b54f-278f-4797-9b5d-38898e4a23aa)
-### Пример связывания задач одного типа ###
+### Пример связывания задач одного типа (можно привязывать к глобальной задаче более конкретные мелкие подзадачи) ###
 ![image](https://github.com/user-attachments/assets/7abd754b-380d-4ce4-9b92-473a98a38922)
 ### Диаграмма Ганта
 ![image](https://github.com/user-attachments/assets/f050ce3a-7063-405e-a8f4-a7715d71ee13)
