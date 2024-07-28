@@ -10,15 +10,16 @@ public class RandomPairs {
     while (map.size() < 100) {
       int key = random.nextInt(1000);
       String value = "v_" + map.size();
-      if (!map.containsKey(key)) {
-        map.put(key, value);
-      }
+      map.computeIfAbsent(key, k -> value);
     }
 
     System.out.println("Конейнер заполнен. Текущий размер: " + map.size() + "\n");
 
-    for (Integer key : map.keySet()) {
-      System.out.println("Ключ: " + key + ", Значение: " + map.get(key));
+    for (Map.Entry<Integer, String> entry : map.entrySet()) {
+      Integer key = entry.getKey();
+      String value = entry.getValue();
+
+      System.out.println("Ключ: " + key + ", Значение: " + value);
     }
 
     map.clear();

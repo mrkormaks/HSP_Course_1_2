@@ -1,8 +1,11 @@
 import java.io.*;
 import java.nio.file.*;
+import java.util.logging.Logger;
 import java.util.zip.*;
 
 public class ZipFileUpdater {
+
+  private static final Logger logger = Logger.getLogger(ZipFileUpdater.class.getName());
 
   // Метод для добавления файлов в существующий архив
   public static void addFilesToExistingZip(String zipFilePath, String[] filesToAdd) throws IOException {
@@ -12,7 +15,7 @@ public class ZipFileUpdater {
     Path originalFile = Paths.get(zipFilePath); // Исходный файл архива
     boolean renameOk = Files.move(originalFile, tempFile, StandardCopyOption.REPLACE_EXISTING) != null; // Переименовываем оригинальный файл архива
     if (!renameOk) {
-      throw new RuntimeException("Не удаётся переименовать файл " + zipFilePath + " в " + tempFile.toAbsolutePath());
+      throw new IllegalArgumentException("Не удаётся переименовать файл " + zipFilePath + " в " + tempFile.toAbsolutePath());
     }
 
     byte[] buf = new byte[1024]; // Создаём буфер для чтения данных
@@ -67,7 +70,7 @@ public class ZipFileUpdater {
     try {
       // Создаём пустой архив
       createEmptyZip(zipFilePath);
-      System.out.println("Пустой архив успешно создан.");
+      logger.info("Пустой архив успешно создан.");
 
       // Создаём файлы, которые будут добавлены в архив
       for (String fileName : filesToAdd) {
@@ -76,7 +79,7 @@ public class ZipFileUpdater {
 
       // Добавляем файлы в архив
       addFilesToExistingZip(zipFilePath, filesToAdd);
-      System.out.println("Файлы успешно добавлены в архив.");
+      logger.info("Файлы успешно добавлены в архив.");
     } catch (IOException e) {
       e.printStackTrace(); // Выводим стек трассировки исключения
     }
