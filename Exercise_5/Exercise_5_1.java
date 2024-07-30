@@ -33,6 +33,16 @@ class Weapon {
     this.ammo = Math.max(newAmmo, 0); // Минимум 0
   }
 
+  public int getAmmoCount() {
+    return this.ammo;
+  }
+
+  public void shoot() {
+    if (this.ammo > 0) {
+      this.ammo -= 1;
+    }
+  }
+
   public void shoot(Person target) {
     if (this.ammo > 0) {
       this.ammo -= 1;
@@ -127,6 +137,12 @@ class Person {
     }
   }
 
+  public void shoot() {
+        if (this.weapon != null) {
+      this.weapon.shoot();
+    }
+  }
+
   public void shoot(Person target) {
     if (this.weapon != null) {
       this.weapon.shoot(target);
@@ -178,6 +194,10 @@ public class Exercise_5_1 {
     Person enemy = new Person();
     enemy.setName("Enemy");
     enemy.setLevel(5);
+
+    System.out.println("Ammo count: " + weapon.getAmmoCount());
+    hero.shoot();
+    System.out.println("Ammo count: " + weapon.getAmmoCount());
 
     hero.shoot(enemy);
     System.out.println(enemy.getName() + "'s health: " + enemy.getHealth());
