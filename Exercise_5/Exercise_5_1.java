@@ -1,5 +1,5 @@
 // Три простых класса
-public class Weapon {
+class Weapon {
   private String name = "Gun";
   private int maxDamage = 10;
   private int weight = 5;
@@ -41,7 +41,7 @@ public class Weapon {
   }
 }
 
-public class Armor {
+class Armor {
   private String name = "Default Armor";
   private int durability = 10;
   private int weight = 5;
@@ -75,7 +75,7 @@ public class Armor {
   }
 }
 
-public class Person {
+class Person {
   private String name = "Nameless";
   private float health = 100.0f;
   private float stamina = 100.0f;
