@@ -6,7 +6,11 @@ import org.junit.jupiter.api.Test;
 import mathoperations.MathUtils;
 import converter.HexConverter;
 
+import java.util.Random;
+
 public class AppTest {
+
+    private final Random random = new Random();
 
     @Test
     public void testIsEven() {
@@ -49,5 +53,45 @@ public class AppTest {
         assertEquals("10", HexConverter.squareIntToHex(-4), "Квадрат -4 должен быть '10' в шестнадцатеричной системе");
         assertEquals("19", HexConverter.squareIntToHex(-5), "Квадрат -5 должен быть '19' в шестнадцатеричной системе");
         assertEquals("0", HexConverter.squareIntToHex(0), "Квадрат 0 должен быть '0' в шестнадцатеричной системе");
+    }
+
+    @Test
+    public void testNullHandling() {
+        // Проверка на null в методе decToHex
+        try {
+            HexConverter.decToHex(null);
+        } catch (NullPointerException e) {
+            // Проверка, что было выброшено NullPointerException
+            assertEquals(NullPointerException.class, e.getClass(), "Преобразование null должно вызывать NullPointerException");
+        }
+
+        // Проверка на null в методе squareIntToHex
+        try {
+            HexConverter.squareIntToHex(null);
+        } catch (NullPointerException e) {
+            // Проверка, что было выброшено NullPointerException
+            assertEquals(NullPointerException.class, e.getClass(), "Преобразование null должно вызывать NullPointerException");
+        }
+    }
+
+    @Test
+    public void testRandomValues() {
+
+        // Тестирование с 1000 случайных значений
+        for (int i = 0; i < 1000; i++) {
+            int randomNumber = random.nextInt();
+            int squared = MathUtils.squareInt(randomNumber);
+            String hex = HexConverter.decToHex(randomNumber);
+            String hexSquared = HexConverter.squareIntToHex(randomNumber);
+
+            // Проверка возведения в квадрат
+            assertEquals(squared, randomNumber * randomNumber, "Квадрат " + randomNumber + " должен быть " + (randomNumber * randomNumber));
+
+            // Проверка преобразования в шестнадцатеричное представление
+            assertEquals(hex, Integer.toHexString(randomNumber).toUpperCase(), "Шестнадцатеричное представление " + randomNumber + " должно быть " + Integer.toHexString(randomNumber).toUpperCase());
+
+            // Проверка возведения в квадрат и преобразования в шестнадцатеричное представление
+            assertEquals(hexSquared, Integer.toHexString(squared).toUpperCase(), "Шестнадцатеричное представление квадрата " + randomNumber + " должно быть " + Integer.toHexString(squared).toUpperCase());
+        }
     }
 }
