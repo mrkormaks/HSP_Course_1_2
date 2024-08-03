@@ -1,12 +1,10 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-
 import org.junit.jupiter.api.Test;
 import mathoperations.MathUtils;
 import converter.HexConverter;
 
 import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AppTest {
 
@@ -58,20 +56,9 @@ public class AppTest {
     @Test
     public void testNullHandling() {
         // Проверка на null в методе decToHex
-        try {
-            HexConverter.decToHex(null);
-        } catch (NullPointerException e) {
-            // Проверка, что было выброшено NullPointerException
-            assertEquals(NullPointerException.class, e.getClass(), "Преобразование null должно вызывать NullPointerException");
-        }
-
+        assertThrows(AssertionError.class, () -> HexConverter.decToHex(null), "Преобразование null должно вызывать AssertionError");
         // Проверка на null в методе squareIntToHex
-        try {
-            HexConverter.squareIntToHex(null);
-        } catch (NullPointerException e) {
-            // Проверка, что было выброшено NullPointerException
-            assertEquals(NullPointerException.class, e.getClass(), "Преобразование null должно вызывать NullPointerException");
-        }
+        assertThrows(AssertionError.class, () -> HexConverter.squareIntToHex(null), "Преобразование null должно вызывать AssertionError");
     }
 
     @Test
