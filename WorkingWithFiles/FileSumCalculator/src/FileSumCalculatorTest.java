@@ -5,12 +5,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FileSumCalculatorTest {
   @Test
-  void testCalculateSumValidFiles() {
+  void testCalculateSumValidFiles() throws IOException {
     createTestFile("../TextFiles/1.txt", "10\n20\n30\n");
     createTestFile("../TextFiles/2.txt", "5\n15\n25\n");
 
-    String result = FileSumCalculator.calculateSum(1, 2, "../TextFiles/");
-    assertEquals("Сумма чисел в файлах 1.txt и 2.txt : 105", result);
+    int result = FileSumCalculator.calculateSum(1, 2, "../TextFiles/");
+    assertEquals(105, result);
   }
 
   @Test
@@ -18,8 +18,7 @@ class FileSumCalculatorTest {
     createTestFile("../TextFiles/1.txt", "10\ninvalid\n30\n");
     createTestFile("../TextFiles/2.txt", "5\n15\n25\n");
 
-    String result = FileSumCalculator.calculateSum(1, 2, "../TextFiles/");
-    assertEquals("Файл ../TextFiles/1.txt содержит невалидные данные.", result);
+    assertThrows(NumberFormatException.class, () -> FileSumCalculator.calculateSum(1, 2, "../TextFiles/"));
   }
 
   private void createTestFile(String path, String content) {

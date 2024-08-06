@@ -2,7 +2,8 @@ import java.io.*;
 import java.util.Scanner;
 
 public class FileSumCalculator {
-  public static String calculateSum(int fileNum1, int fileNum2, String path) {
+
+  public static int calculateSum(int fileNum1, int fileNum2, String path) throws IOException, NumberFormatException {
     int sum = 0;
     String[] filenames = {path + fileNum1 + ".txt", path + fileNum2 + ".txt"};
 
@@ -12,23 +13,17 @@ public class FileSumCalculator {
         int count = 0;
 
         while ((line = br.readLine()) != null) {
-          try {
-            sum += Integer.parseInt(line);
-            count++;
-          } catch (NumberFormatException e) {
-            return "Файл " + filename + " содержит невалидные данные.";
-          }
+          sum += Integer.parseInt(line);
+          count++;
         }
 
         if (count != 3) {
-          return "Файл " + filename + " содержит отличное от 3-х число параметров.";
+          throw new IOException("Файл " + filename + " содержит отличное от 3-х число параметров.");
         }
-      } catch (IOException e) {
-        return "Ошибка во время чтения файла " + filename + ".";
       }
     }
 
-    return "Сумма чисел в файлах " + fileNum1 + ".txt и " + fileNum2 + ".txt : " + sum;
+    return sum;
   }
 
   public static void main(String[] args) {
@@ -40,6 +35,13 @@ public class FileSumCalculator {
       integers[i] = sc.nextInt();
     }
 
-    System.out.println(calculateSum(integers[0], integers[1], "../TextFiles/"));
+    try {
+      int sum = calculateSum(integers[0], integers[1], "../TextFiles/");
+      System.out.println("Сумма чисел в файлах " + integers[0] + ".txt и " + integers[1] + ".txt : " + sum);
+    } catch (NumberFormatException e) {
+      System.out.println("Файлы содержат невалидные данные.");
+    } catch (IOException e) {
+      System.out.println(e.getMessage());
+    }
   }
 }
