@@ -9,9 +9,10 @@ class FileSumCalculatorTest {
     createTestFile("../TextFiles/1.txt", "10\n20\n30\n");
     createTestFile("../TextFiles/2.txt", "5\n15\n25\n");
 
-    Integer result = FileSumCalculator.calculateSum(1, 2, "../TextFiles/");
-    assertNotNull(result,  "Результат НЕ должен быть null для файлов с валидными данными");
-    assertEquals(105, result, "Ожидаемая сумма чисел в файлах 1.txt и 2.txt должна быть 105");
+    FileSumCalculator.Result result = FileSumCalculator.calculateSum(1, 2, "../TextFiles/");
+    assertNotNull(result.getSum(),  "Результат НЕ должен быть null для файлов с валидными данными");
+    assertEquals(FileSumCalculator.ErrorCode.SUCCESS, result.getErrorCode(), "Ожидается код SUCCESS для валидных данных.");
+    assertEquals(105, result.getSum(), "Ожидаемая сумма чисел в файлах 1.txt и 2.txt должна быть 105");
   }
 
   @Test
@@ -19,8 +20,9 @@ class FileSumCalculatorTest {
     createTestFile("../TextFiles/1.txt", "10\ninvalid\n30\n");
     createTestFile("../TextFiles/2.txt", "5\n15\n25\n");
 
-    Integer result = FileSumCalculator.calculateSum(1, 2, "../TextFiles/");
-    assertNull(result, "Результат должен быть null для файлов с невалидными данными");
+    FileSumCalculator.Result result = FileSumCalculator.calculateSum(1, 2, "../TextFiles/");
+    assertNull(result.getSum(), "Результат должен быть null для файлов с невалидными данными");
+    assertEquals(FileSumCalculator.ErrorCode.INVALID_DATA, result.getErrorCode(), "Ожидается код INVALID_DATA для невалидных данных.");
   }
 
   private void createTestFile(String path, String content) {
