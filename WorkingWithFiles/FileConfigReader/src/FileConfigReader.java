@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 class Cat {
   String name;
@@ -14,9 +15,47 @@ class Cat {
 }
 
 public class FileConfigReader {
-  public static void main(String[] args) {
+
+  private static final Logger logger = Logger.getLogger(FileConfigReader.class.getName());
+
+  public enum ErrorCode {
+    SUCCESS,
+    FILE_NOT_FOUND,
+    FILE_READ_ERROR,
+    ILLEGAL_DATA,
+    INVALID_DATA_FORMAT,
+    INCORRECT_PARAMETERS_COUNT
+  }
+
+  public static class Result {
+    private final ArrayList<Cat> cats;
+    private final ErrorCode errorCode;
+
+    public Result(ArrayList<Cat> cats, ErrorCode errorCode) {
+      this.cats = cats;
+      this.errorCode = errorCode;
+    }
+
+    public ArrayList<Cat> getCats() {
+      return this.cats;
+    }
+
+    public ErrorCode getErrorCode() {
+      return this.errorCode;
+    }
+  }
+
+  // Взято с https://www.baeldung.com/java-log-console-in-color
+  public static void logInfo(String msg) {
+    logger.info("\u001B[32m" + msg + "\u001B[0m");
+  }
+
+  public static void logWarning(String msg) {
+    logger.warning("\u001B[33m" + msg + "\u001B[0m");
+  }
+
+  public static Result parseCats(String filename) {
     ArrayList<Cat> cats = new ArrayList<>();
-    String filename = "Cats.txt"; // Создал заранее
 
     try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
       String line;
@@ -25,26 +64,51 @@ public class FileConfigReader {
         try {
           String[] parts = line.split(" ");
           if (parts.length != 3) {
-            throw new IllegalArgumentException("Некорректное количество параметров.");
+            logWarning("Некорректное количество параметров в строке " + line + ". " + "Должно быть 3 параметра. Сейчас: " + parts.length);
+            return new Result(null, ErrorCode.INCORRECT_PARAMETERS_COUNT);
           }
 
-          String name = parts[0];
-          double weight = Double.parseDouble(parts[1]);
-          int purrFrequency = Integer.parseInt(parts[2]);
+          String name;
+          double weight;
+          int purrFrequency;
+
+          try {
+            name = parts[0];
+            weight = Double.parseDouble(parts[1]);
+            purrFrequency = Integer.parseInt(parts[2]);
+          } catch (NumberFormatException e) {
+            logWarning("Невалидный тип данных в строке " + line + ".");
+            return new Result(null, ErrorCode.INVALID_DATA_FORMAT);
+          }
 
           cats.add(new Cat(name, weight, purrFrequency));
-        } catch (Exception e) {
-          System.out.println("Ошибка обработки строки: " + line);
-          e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+          logWarning("Недопустимый параметр в строке " + line + ".");
+          return new Result(null, ErrorCode.ILLEGAL_DATA);
         }
       }
+    } catch (FileNotFoundException e) {
+      logWarning("Файл " + filename + " не найден.");
+      return new Result(null, ErrorCode.FILE_NOT_FOUND);
     } catch (IOException e) {
-      System.out.println("Ошибка чтения файла " + filename + ".");
-      e.printStackTrace();
+      logWarning("Ошибка чтения файла " + filename + ".");
+      return new Result(null, ErrorCode.FILE_READ_ERROR);
     }
 
-    for (Cat cat : cats) {
-      System.out.println("Имя: " + cat.name + "; " + "Вес: " + cat.weight + "; " + "Частота мурчания: " + cat.purrFrequency + ".");
+    return new Result(cats, ErrorCode.SUCCESS);
+  }
+
+  public static void main(String[] args) {
+    String filename = "Cats.txt"; // Создал заранее
+
+    Result result = parseCats(filename);
+
+    if (result.getErrorCode() == ErrorCode.SUCCESS) {
+      for (Cat cat : result.getCats()) {
+        logInfo("Имя: " + cat.name + "; " + "Вес: " + cat.weight + "; " + "Частота мурчания: " + cat.purrFrequency + ".");
+      }
+    } else {
+      logWarning("Массив данных пуст. Код ошибки: " + result.getErrorCode());
     }
   }
 }
