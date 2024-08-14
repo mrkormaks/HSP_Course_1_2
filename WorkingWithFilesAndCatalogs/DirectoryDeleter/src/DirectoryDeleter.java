@@ -1,13 +1,20 @@
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.Comparator;
-import java.util.stream.Stream;
-import java.io.File;
-
+import java.util.logging.Logger;
 
 public class DirectoryDeleter {
 
-  public static boolean deleteDirectoryAndFiles(String directoryPath) throws IOException {
+  // Пути к тестовым директориям
+  private static final String EMPTY_DIR = "EmptyDirectory";
+  private static final String FULL_DIR = "FullDirectory";
+  private static final String FILES_ONLY_DIR = "FilesOnlyDirectory";
+  private static final String SUCCESS = "успешно";
+  private static final String FAILURE = "не успешно";
+
+
+  private static final Logger logger = Logger.getLogger(DirectoryDeleter.class.getName());
+
+  public static boolean tryDeleteDirectoryAndFiles(String directoryPath) throws IOException {
     Path dir = Paths.get(directoryPath);
 
     if (!Files.exists(dir) || !Files.isDirectory(dir)) {
@@ -42,30 +49,15 @@ public class DirectoryDeleter {
     return false; // Нет подкаталогов
   }
 
-  public static void deleteIfExists(String directoryPath) throws IOException { // Взято с https://www.baeldung.com/java-delete-directory
-    Path pathToBeDeleted = Paths.get(directoryPath);
-    if (!Files.exists(pathToBeDeleted) || !Files.isDirectory(pathToBeDeleted))
-      return;
-
-    try (Stream<Path> pathStream = Files.walk(pathToBeDeleted)) {
-      pathStream.sorted(Comparator.reverseOrder())
-              .map(Path::toFile)
-              .forEach(File::delete);
-    }
-  }
-
   public static void main(String[] args) throws IOException {
-    deleteIfExists("EmptyDirectory");
-    deleteIfExists("FullDirectory");
-    deleteIfExists("FilesOnlyDirectory");
 
     try {
       // Создание пустой директории
-      Path emptyDir = Paths.get("EmptyDirectory");
+      Path emptyDir = Paths.get(EMPTY_DIR);
       Files.createDirectory(emptyDir);
 
       // Создание директории с подкаталогами и файлами
-      Path fullDirectory = Paths.get("FullDirectory");
+      Path fullDirectory = Paths.get(FULL_DIR);
       Files.createDirectory(fullDirectory);
       Files.createDirectory(fullDirectory.resolve("subDirectory1"));
       Files.createDirectory(fullDirectory.resolve("subDirectory2"));
@@ -73,22 +65,23 @@ public class DirectoryDeleter {
       Files.createFile(fullDirectory.resolve("file2.txt"));
 
       // Создание директории с файлами, но без подкаталогов
-      Path filesOnlyDir = Paths.get("FilesOnlyDirectory");
+      Path filesOnlyDir = Paths.get(FILES_ONLY_DIR);
       Files.createDirectory(filesOnlyDir);
       Files.createFile(filesOnlyDir.resolve("file1.txt"));
       Files.createFile(filesOnlyDir.resolve("file2.txt"));
 
       // Применение метода удаления к пустой директории
-      boolean result1 = deleteDirectoryAndFiles("EmptyDirectory");
-      System.out.println("Удаление пустого каталога " + (result1 ? "успешно" : "не удалось"));
+      boolean result1 = tryDeleteDirectoryAndFiles(EMPTY_DIR);
+      logger.info("Удаление пустого каталога " + (result1 ? SUCCESS : FAILURE));
 
       // Применение метода удаления к директории с подкаталогами и файлами
-      boolean result2 = deleteDirectoryAndFiles("FullDirectory");
-      System.out.println("Удаление каталога с файлами и подкаталогами " + (result2 ? "успешно" : "не удалось"));
+      boolean result2 = tryDeleteDirectoryAndFiles(FULL_DIR);
+      logger.info("Удаление каталога с файлами и подкаталогами " + (result2 ? SUCCESS : FAILURE));
 
       // Применение метода удаления к директории с файлами, но без подкаталогов
-      boolean result3 = deleteDirectoryAndFiles("FilesOnlyDirectory");
-      System.out.println("Удаление каталога с файлами " + (result3 ? "успешно" : "не удалось"));
+      boolean result3 = tryDeleteDirectoryAndFiles(FILES_ONLY_DIR);
+      logger.info("Удаление каталога с файлами " + (result3 ? SUCCESS : FAILURE));
+
     } catch (IOException e) {
       e.printStackTrace();
     }
