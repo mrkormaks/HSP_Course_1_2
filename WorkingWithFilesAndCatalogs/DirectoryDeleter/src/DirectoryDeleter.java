@@ -24,7 +24,7 @@ public class DirectoryDeleter {
       return false;
     }
 
-    List<List<String>> directoryContentLists = returnLists(directoryPath, "txt", false);
+    List<List<String>> directoryContentLists = returnDirectoryContent(directoryPath, "txt", false);
     if (!directoryContentLists.get(1).isEmpty())
       return false;
 
@@ -42,7 +42,7 @@ public class DirectoryDeleter {
     }
   }
 
-  public static List<List<String>> returnLists(String directoryPath, String fileExtension, boolean includeSubdirectories) throws IllegalArgumentException, IOException {
+  public static List<List<String>> returnDirectoryContent(String directoryPath, String fileExtension, boolean includeSubdirectories) throws IllegalArgumentException, IOException {
     List<String> filesList = new ArrayList<>();
     List<String> subdirectoriesList = new ArrayList<>();
 
