@@ -1,6 +1,9 @@
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 public class DirectoryDeleter {
 
@@ -21,7 +24,8 @@ public class DirectoryDeleter {
       return false;
     }
 
-    if (hasSubdirectories(dir))
+    List<List<String>> directoryContentLists = returnLists(directoryPath, "txt", false);
+    if (!directoryContentLists.get(1).isEmpty())
       return false;
 
     try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) { // Объект для перебора записей в каталоге. Поток каталогов позволяет удобно использовать конструкцию for-each для перебора каталогов (https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/DirectoryStream.html)
@@ -38,15 +42,40 @@ public class DirectoryDeleter {
     }
   }
 
-  private static boolean hasSubdirectories(Path dir) throws IOException {
-    try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
-      for (Path path : stream) {
-        if (Files.isDirectory(path)) {
-          return true; // Если есть подкаталоги
+  public static List<List<String>> returnLists(String directoryPath, String fileExtension, boolean includeSubdirectories) throws IllegalArgumentException, IOException {
+    List<String> filesList = new ArrayList<>();
+    List<String> subdirectoriesList = new ArrayList<>();
+
+    Path directory = Paths.get(directoryPath);
+    if (!Files.exists(directory) || !Files.isDirectory(directory))
+      throw new IllegalArgumentException("Каталога с таким именем не существует или файл не является каталогом: " + directoryPath);
+
+    try (Stream<Path> stream = Files.walk(directory, 1)) {
+      stream.forEach(path -> {
+        if (Files.isRegularFile(path) && path.toString().endsWith("." + fileExtension)) {
+          filesList.add(path.toString());
+        } else if (Files.isDirectory(path) && !path.equals(directory)) {
+          subdirectoriesList.add(path.toString());
+          if (includeSubdirectories) {
+            try {
+              List<List<String>> subdirectoryResult = returnLists(path.toString(), fileExtension, false);
+              filesList.addAll(subdirectoryResult.get(0));
+              subdirectoriesList.addAll(subdirectoryResult.get(1));
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
+          }
         }
-      }
+      });
+    } catch (IOException e) {
+      e.printStackTrace();
     }
-    return false; // Нет подкаталогов
+
+    List<List<String>> resultList = new ArrayList<>();
+    resultList.add(filesList);
+    resultList.add(subdirectoriesList);
+
+    return resultList;
   }
 
   public static void main(String[] args) throws IOException {
