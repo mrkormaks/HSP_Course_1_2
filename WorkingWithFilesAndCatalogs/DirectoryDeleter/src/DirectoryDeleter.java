@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 
 public class DirectoryDeleter {
 
-  // Пути к тестовым директориям
+  // Константы
   private static final String EMPTY_DIR = "EmptyDirectory";
   private static final String FULL_DIR = "FullDirectory";
   private static final String FILES_ONLY_DIR = "FilesOnlyDirectory";
