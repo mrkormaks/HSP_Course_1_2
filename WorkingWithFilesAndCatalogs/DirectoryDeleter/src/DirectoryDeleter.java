@@ -58,7 +58,7 @@ public class DirectoryDeleter {
           subdirectoriesList.add(path.toString());
           if (includeSubdirectories) {
             try {
-              List<List<String>> subdirectoryResult = returnLists(path.toString(), fileExtension, false);
+              List<List<String>> subdirectoryResult = returnDirectoryContent(path.toString(), fileExtension, false);
               filesList.addAll(subdirectoryResult.get(0));
               subdirectoriesList.addAll(subdirectoryResult.get(1));
             } catch (IOException e) {
