@@ -20,24 +20,23 @@ public class DirectoryDeleter {
   public static boolean tryDeleteDirectoryAndFiles(String directoryPath) throws IOException {
     Path dir = Paths.get(directoryPath);
 
-    if (!Files.exists(dir) || !Files.isDirectory(dir)) {
-      return false;
-    }
-
     List<List<String>> directoryContentLists = returnDirectoryContent(directoryPath, "txt", false);
     if (!directoryContentLists.get(1).isEmpty())
       return false;
 
-    try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) { // Объект для перебора записей в каталоге. Поток каталогов позволяет удобно использовать конструкцию for-each для перебора каталогов (https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/DirectoryStream.html)
+    for (String filePath : directoryContentLists.get(0)) {
+      Files.delete(Paths.get(filePath));
+    }
 
-      for (Path path : stream)
-        Files.delete(path);
+    for (String subDirPath : directoryContentLists.get(1)) {
+      Files.delete(Paths.get(subDirPath));
+    }
+
+    try {
       Files.delete(dir);
-
       return true;
     } catch (IOException e) {
       e.printStackTrace();
-
       return false;
     }
   }
