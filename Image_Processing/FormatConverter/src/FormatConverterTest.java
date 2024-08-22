@@ -7,14 +7,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FormatConverterTest {
 
-  private final String testDir = "../testDir";
-  private final String sourceFormat = "bmp";
-  private final String targetFormat = "png";
+  private static final String TEST_DIR = "../testDir";
+  private static final String SOURCE_FORMAT = "bmp";
+  private static final String TARGET_FORMAT = "png";
 
   @BeforeEach
   public void setUp() throws Exception {
     // Создаем тестовую директорию, если она не существует
-    File dir = new File(testDir);
+    File dir = new File(TEST_DIR);
     if (!dir.exists()) {
       dir.mkdirs();
     }
@@ -22,14 +22,14 @@ public class FormatConverterTest {
     // Создаем тестовые изображения
     for (int i = 1; i <= 4; i++) {
       BufferedImage newImage = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
-      ImageIO.write(newImage, sourceFormat, new File(testDir + "/image" + i + "." + sourceFormat));
+      ImageIO.write(newImage, SOURCE_FORMAT, new File(TEST_DIR + "/image" + i + "." + SOURCE_FORMAT));
     }
   }
 
   @AfterEach
-  public void tearDown() throws Exception {
+  public void tearDown() {
     // Удаляем все тестовые файлы
-    File dir = new File(testDir);
+    File dir = new File(TEST_DIR);
     File[] files = dir.listFiles();
     if (files != null) {
       for (File file : files) {
@@ -42,21 +42,23 @@ public class FormatConverterTest {
 
   @Test
   public void testImageConversion() {
-    // Выполняем конвертацию
-    FormatConverter.convertImageFormat(testDir, sourceFormat, targetFormat);
+    // Выполняем конвертацию с учетом подкаталогов
+    FormatConverter.ErrorCode result = FormatConverter.tryConvertImageFormat(TEST_DIR, SOURCE_FORMAT, TARGET_FORMAT, true);
+
+    // Проверяем успешность конвертации
+    assertEquals(FormatConverter.ErrorCode.SUCCESS, result, "Конвертация должна завершиться успешно");
 
     // Проверяем, что файлы с исходным форматом были сконвертированы
     for (int i = 1; i <= 4; i++) {
-      File sourceFile = new File(testDir + "/image" + i + "." + sourceFormat);
-      File targetFile = new File(testDir + "/image" + i + "." + targetFormat);
+      File targetFile = new File(TEST_DIR + "/image" + i + "." + TARGET_FORMAT);
 
-      assertTrue(targetFile.exists(),"Target file should exist: " + targetFile.getName());
+      assertTrue(targetFile.exists(), "Файл " + targetFile.getName() + " должен существовать");
 
       try {
         BufferedImage img = ImageIO.read(targetFile);
-        assertNotNull(img,"Target image should be readable: " + targetFile.getName());
+        assertNotNull(img, "Изображение " + targetFile.getName() + " должно быть читаемым");
       } catch (Exception e) {
-        fail("Exception thrown while reading target file: " + targetFile.getName());
+        fail("Исключение при чтении файла: " + targetFile.getName());
       }
     }
   }
