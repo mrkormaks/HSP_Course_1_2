@@ -1,28 +1,21 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class DuplicateValues {
 
-  public static List<Integer> findDuplicateValues(List<Integer> values, int num) {
+  public static Set<Integer> findDuplicateValues(List<Integer> values, int num) {
 
     Map<Integer, Integer> frequencyMap = new HashMap<>(); // запишем сюда количество повторений каждого числа из List (ключ - число, значение - количество повторений)
+    Set<Integer> result = new HashSet<>();
 
     for (Integer value : values) {
       if (frequencyMap.containsKey(value)) {
         frequencyMap.put(value, frequencyMap.get(value) + 1);
       } else {
-        frequencyMap.put(value, 0 + 1);
+        frequencyMap.put(value, 1);
       }
-    }
 
-    List<Integer> result = new ArrayList<>();
-    for (Map.Entry<Integer, Integer> entry : frequencyMap.entrySet()) {
-      if (entry.getValue() >= num) {
-        result.add(entry.getKey());
+      if (frequencyMap.get(value) >= num) {
+        result.add(value);
       }
     }
 
@@ -43,7 +36,7 @@ public class DuplicateValues {
     System.out.println("Введите количество повторений:");
     int num = scanner.nextInt();
 
-    List<Integer> result = findDuplicateValues(values, num);
+    Set<Integer> result = findDuplicateValues(values, num);
 
     System.out.println("Значения " + result + " повторяются не менее " + num + " раз.");
   }

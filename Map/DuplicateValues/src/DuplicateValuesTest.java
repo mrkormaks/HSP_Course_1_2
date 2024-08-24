@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 public class DuplicateValuesTest {
 
@@ -24,7 +25,7 @@ public class DuplicateValuesTest {
 
     int num = 5;
     List<Integer> expected = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-    List<Integer> result = DuplicateValues.findDuplicateValues(values, num);
+    Set<Integer> result = DuplicateValues.findDuplicateValues(values, num);
 
     assertEquals(expected.size(), result.size());
     assertTrue(result.containsAll(expected));
@@ -47,7 +48,7 @@ public class DuplicateValuesTest {
 
     int num = 7;
     List<Integer> expected = Arrays.asList(6, 7, 8, 9, 10);
-    List<Integer> result = DuplicateValues.findDuplicateValues(values, num);
+    Set<Integer> result = DuplicateValues.findDuplicateValues(values, num);
 
     assertEquals(expected.size(), result.size());
     assertTrue(result.containsAll(expected));
@@ -61,7 +62,7 @@ public class DuplicateValuesTest {
 
     int num = 2; // заведомо ставим число больше, чем любой элемент из списка повторяется
     List<Integer> expected = new ArrayList<>();
-    List<Integer> result = DuplicateValues.findDuplicateValues(values, num);
+    Set<Integer> result = DuplicateValues.findDuplicateValues(values, num);
 
     assertEquals(expected.size(), result.size());
     assertTrue(result.isEmpty());
