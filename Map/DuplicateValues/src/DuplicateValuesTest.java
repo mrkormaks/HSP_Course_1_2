@@ -1,10 +1,7 @@
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class DuplicateValuesTest {
 
@@ -25,10 +22,15 @@ public class DuplicateValuesTest {
 
     int num = 5;
     List<Integer> expected = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-    Set<Integer> result = DuplicateValues.findDuplicateValues(values, num);
+    Map<Integer, Integer> result = DuplicateValues.findDuplicateValues(values, num);
 
     assertEquals(expected.size(), result.size());
-    assertTrue(result.containsAll(expected));
+
+    for (Integer key : expected){
+      assertTrue(result.containsKey(key));
+      assertTrue(result.get(key) >= num, "Количество элементов " + key + " должно быть не меньше " + num);
+    }
+
   }
 
   @Test
@@ -48,10 +50,14 @@ public class DuplicateValuesTest {
 
     int num = 7;
     List<Integer> expected = Arrays.asList(6, 7, 8, 9, 10);
-    Set<Integer> result = DuplicateValues.findDuplicateValues(values, num);
+    Map<Integer, Integer> result = DuplicateValues.findDuplicateValues(values, num);
 
     assertEquals(expected.size(), result.size());
-    assertTrue(result.containsAll(expected));
+
+    for (Integer key : expected){
+      assertTrue(result.containsKey(key));
+      assertTrue(result.get(key) >= num, "Количество элементов " + key + " должно быть не меньше " + num);
+    }
   }
 
   @Test
@@ -62,9 +68,9 @@ public class DuplicateValuesTest {
 
     int num = 2; // заведомо ставим число больше, чем любой элемент из списка повторяется
     List<Integer> expected = new ArrayList<>();
-    Set<Integer> result = DuplicateValues.findDuplicateValues(values, num);
+    Map<Integer, Integer> result = DuplicateValues.findDuplicateValues(values, num);
 
     assertEquals(expected.size(), result.size());
-    assertTrue(result.isEmpty());
+    assertTrue(result.isEmpty(), "Результирующая мапа должна быть пустой");
   }
 }
