@@ -22,15 +22,10 @@ public class DuplicateValuesTest {
 
     int num = 5;
     List<Integer> expected = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-    Map<Integer, Integer> result = DuplicateValues.findDuplicateValues(values, num);
+    List<Integer> result = DuplicateValues.findDuplicateValues(values, num);
 
     assertEquals(expected.size(), result.size());
-
-    for (Integer key : expected){
-      assertTrue(result.containsKey(key));
-      assertTrue(result.get(key) >= num, "Количество элементов " + key + " должно быть не меньше " + num);
-    }
-
+    assertTrue(result.containsAll(expected), "Результат должен содержать все ожидаемые элементы");
   }
 
   @Test
@@ -50,14 +45,10 @@ public class DuplicateValuesTest {
 
     int num = 7;
     List<Integer> expected = Arrays.asList(6, 7, 8, 9, 10);
-    Map<Integer, Integer> result = DuplicateValues.findDuplicateValues(values, num);
+    List<Integer> result = DuplicateValues.findDuplicateValues(values, num);
 
     assertEquals(expected.size(), result.size());
-
-    for (Integer key : expected){
-      assertTrue(result.containsKey(key));
-      assertTrue(result.get(key) >= num, "Количество элементов " + key + " должно быть не меньше " + num);
-    }
+    assertTrue(result.containsAll(expected), "Результат должен содержать все ожидаемые элементы");
   }
 
   @Test
@@ -68,9 +59,9 @@ public class DuplicateValuesTest {
 
     int num = 2; // заведомо ставим число больше, чем любой элемент из списка повторяется
     List<Integer> expected = new ArrayList<>();
-    Map<Integer, Integer> result = DuplicateValues.findDuplicateValues(values, num);
+    List<Integer> result = DuplicateValues.findDuplicateValues(values, num);
 
     assertEquals(expected.size(), result.size());
-    assertTrue(result.isEmpty(), "Результирующая мапа должна быть пустой");
+    assertTrue(result.isEmpty(), "Результат должен быть пустым");
   }
 }
