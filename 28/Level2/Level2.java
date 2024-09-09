@@ -1,4 +1,4 @@
-public class Level2 {
+public class Level1 {
   public static int odometer(int[] oksana) {
     int distance = 0;
     int[] list1 = new int[(oksana.length / 2) + 1];
