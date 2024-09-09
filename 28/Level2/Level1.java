@@ -1,8 +1,5 @@
-<<<<<<< HEAD:28/Level2/Level1.java
-=======
 import java.util.*;
 
->>>>>>> 11971180b8be31b12e29400704a7869b8d33ed94:28/Level2/Level2.java
 public class Level1 {
   public static int odometer(int[] oksana) {
     int distance = 0;
