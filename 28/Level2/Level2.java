@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class Level1 {
   public static int odometer(int[] oksana) {
     int distance = 0;
