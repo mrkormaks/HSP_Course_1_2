@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Level1 {
     public static int[] WordSearch(int length, String s, String subs) {
