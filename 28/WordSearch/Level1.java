@@ -4,42 +4,53 @@ import java.util.List;
 public class Level1 {
     public static int[] WordSearch(int length, String s, String subs) {
         List<Integer> resultList = new ArrayList<>();
+        String word = "";
         List<String> wordsList = new ArrayList<>();
         boolean subsWasFound = false;
 
         while (s.length() > length) {
             int lastSpaceIndex = 0;
-
             if (s.charAt(length - 1) != ' ') {
                 for (int i = 0; i < length; i++) {
                     if (s.charAt(i) == ' ') {
                         lastSpaceIndex = i;
                     }
                 }
-
                 if (lastSpaceIndex > 0) {
-                    wordsList.add(s.substring(0, lastSpaceIndex));
-                    s = s.substring(lastSpaceIndex + 1);
+                    word = s.substring(0, lastSpaceIndex);
                 } else {
-                    wordsList.add(s.substring(0, length));
-                    s = s.substring(length);
+                    word = s.substring(0, length);
                 }
             } else {
-                wordsList.add(s.substring(0, length));
-                s = s.substring(length + 1);
+                word = s.substring(0, length);
+            }
+
+            if (s.charAt(length) == ' ') {
+                word = s.substring(0, length);
+            }
+
+            wordsList.add(word);
+
+            if (s.contains(word)) {
+                s = s.replace(word, "");
+            }
+            if (s.charAt(0) == ' ') {
+                s = s.substring(1);
             }
         }
 
         wordsList.add(s);
 
-        for (String line : wordsList) {
-            String[] comparisonList = line.split(" ");
-            for (String word : comparisonList) {
-                if (word.equals(subs)) {
+        for (String w : wordsList) {
+            List<String> comparisonList = Arrays.asList(w.split("\\s+"));
+
+            for (String comp : comparisonList) {
+                if (comp.equals(subs)) {
                     subsWasFound = true;
                     break;
                 }
             }
+
             if (subsWasFound) {
                 resultList.add(1);
             } else {
@@ -48,11 +59,6 @@ public class Level1 {
             subsWasFound = false;
         }
 
-        int[] resultArray = new int[resultList.size()];
-        for (int i = 0; i < resultList.size(); i++) {
-            resultArray[i] = resultList.get(i);
-        }
-
-        return resultArray;
+        return resultList.stream().mapToInt(Integer::intValue).toArray();
     }
 }
