@@ -2,7 +2,8 @@ public static int Unmanned(int L, int N, int[][] track) {
   int currentTime = 0;
   int currentPosition = 0;
 
-  for (int[] trafficLight : track) {
+  for (int i = 0; i < N; i++) {
+    int[] trafficLight = track[i];
     int position = trafficLight[0];
     int redDuration = trafficLight[1];
     int greenDuration = trafficLight[2];
