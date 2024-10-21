@@ -8,6 +8,11 @@ public class Level1 {
     for (int i = 0; i < N; i++) {
       int[] trafficLight = track[i];
       int position = trafficLight[0];
+
+      if (position > L) {
+        break;
+      }
+
       int redDuration = trafficLight[1];
       int greenDuration = trafficLight[2];
       int cycleDuration = redDuration + greenDuration;
