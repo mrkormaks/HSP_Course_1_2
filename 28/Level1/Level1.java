@@ -7,12 +7,11 @@ public class Level1 {
       factorial *= N;
       N--;
     }
-    
-    long result = factorial;
-    while (result > 9) {
-      result /= 10;
-    }
 
-    return (int)result;
+    String result = String.valueOf(factorial);
+    char lastDigit = result.charAt(result.length() - 1);
+
+    return Integer.parseInt(String.valueOf(lastDigit));
   }
 }
+
