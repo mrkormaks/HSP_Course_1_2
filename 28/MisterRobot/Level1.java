@@ -27,8 +27,7 @@ public class Level1 {
   }
 
   private static boolean hasWrongOrder(int[] arr, int start) {
-    return arr[start] > arr[start + 1] ||
-            arr[start + 1] > arr[start + 2];
+    return arr[start] > arr[start + 1] || arr[start + 1] > arr[start + 2];
   }
 
   private static void rotateLeft(int[] arr, int start) {
@@ -36,5 +35,14 @@ public class Level1 {
     arr[start] = arr[start + 1];
     arr[start + 1] = arr[start + 2];
     arr[start + 2] = temp;
+  }
+
+  private static boolean isSorted(int[] arr) {
+    for (int i = 0; i < arr.length - 1; i++) {
+      if (arr[i] > arr[i + 1]) {
+        return false;
+      }
+    }
+    return true;
   }
 }
