@@ -86,14 +86,18 @@ public class Level1 {
   private static void performUndo() {
     if (!undoStack.isEmpty()) {
       redoStack.push(currentString.toString());
-      currentString = new StringBuilder(undoStack.pop());
+      currentString.setLength(0);
+      currentString.append(undoStack.pop());
     }
   }
 
   private static void performRedo() {
     if (!redoStack.isEmpty()) {
       undoStack.push(currentString.toString());
-      currentString = new StringBuilder(redoStack.pop());
+      String redoLast = redoStack.pop();
+      currentString.setLength(0);
+      currentString.append(redoLast);
+      redoStack.push(redoLast);
     }
   }
 }
