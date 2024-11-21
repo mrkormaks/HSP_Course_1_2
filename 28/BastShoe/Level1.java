@@ -4,6 +4,7 @@ public class Level1 {
   private static StringBuilder currentString = new StringBuilder();
   private static Stack<String> undoStack = new Stack<>();
   private static Stack<String> redoStack = new Stack<>();
+  private static boolean isFirstOperation = true;
 
   public static String BastShoe(String command) {
     if (command == null || command.isEmpty()) {
@@ -22,64 +23,67 @@ public class Level1 {
     String parameter = parts.length > 1 ? parts[1] : null;
 
     switch (operationCode) {
-    case 1:
-      if (parameter != null) {
-        performAdd(parameter);
-      }
-      break;
-    case 2:
-      if (parameter != null) {
-        try {
-          int count = Integer.parseInt(parameter);
-
-          performDelete(count);
-        } catch (NumberFormatException e) {
+      case 1:
+        if (parameter != null) {
+          performAdd(parameter);
         }
-      }
-      break;
-    case 3:
-      if (parameter != null) {
-        try {
-          int index = Integer.parseInt(parameter);
-
-          return performGetChar(index);
-        } catch (NumberFormatException e) {
-          return "";
+        break;
+      case 2:
+        if (parameter != null) {
+          try {
+            int count = Integer.parseInt(parameter);
+            performDelete(count);
+          } catch (NumberFormatException e) {
+            //
+          }
         }
-      }
-      break;
-    case 4:
-      performUndo();
-      break;
-    case 5:
-      performRedo();
-      break;
-    default:
-      return currentString.toString();
+        break;
+      case 3:
+        if (parameter != null) {
+          try {
+            int index = Integer.parseInt(parameter);
+            return performGetChar(index);
+          } catch (NumberFormatException e) {
+            return "";
+          }
+        }
+        break;
+      case 4:
+        performUndo();
+        break;
+      case 5:
+        performRedo();
+        break;
+      default:
+        return currentString.toString();
     }
 
     return currentString.toString();
   }
 
   private static void performAdd(String s) {
-    undoStack.push(currentString.toString());
-    redoStack.clear();
-    currentString.append(s);
+    if (!isFirstOperation) {
+      undoStack.push(currentString.toString());
+      redoStack.clear();
+    }
+      currentString.append(s);
+      isFirstOperation = false;
   }
 
   private static void performDelete(int count) {
-    undoStack.push(currentString.toString());
-    redoStack.clear();
-
+    if (!isFirstOperation) {
+      undoStack.push(currentString.toString());
+      redoStack.clear();
+    }
     int lengthToDelete = Math.min(count, currentString.length());
     currentString.delete(currentString.length() - lengthToDelete, currentString.length());
+    isFirstOperation = false;
   }
 
   private static String performGetChar(int index) {
     if (index < 0 || index >= currentString.length()) {
       return "";
     }
-
     return String.valueOf(currentString.charAt(index));
   }
 
@@ -94,10 +98,8 @@ public class Level1 {
   private static void performRedo() {
     if (!redoStack.isEmpty()) {
       undoStack.push(currentString.toString());
-      String redoLast = redoStack.pop();
       currentString.setLength(0);
-      currentString.append(redoLast);
-      redoStack.push(redoLast);
+      currentString.append(redoStack.pop());
     }
   }
 }
