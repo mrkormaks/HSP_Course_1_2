@@ -34,7 +34,7 @@ public class Level1 {
             int count = Integer.parseInt(parameter);
             performDelete(count);
           } catch (NumberFormatException e) {
-            //
+            // Empty
           }
         }
         break;
@@ -62,19 +62,23 @@ public class Level1 {
   }
 
   private static void performAdd(String s) {
-    if (!isFirstOperation) {
-      undoStack.push(currentString.toString());
-      redoStack.clear();
+    if (isFirstOperation) {
+      undoStack.clear();
     }
-      currentString.append(s);
-      isFirstOperation = false;
+
+    undoStack.push(currentString.toString());
+    redoStack.clear();
+    currentString.append(s);
+    isFirstOperation = false;
   }
 
   private static void performDelete(int count) {
-    if (!isFirstOperation) {
-      undoStack.push(currentString.toString());
-      redoStack.clear();
+    if (isFirstOperation) {
+      undoStack.clear();
     }
+
+    undoStack.push(currentString.toString());
+    redoStack.clear();
     int lengthToDelete = Math.min(count, currentString.length());
     currentString.delete(currentString.length() - lengthToDelete, currentString.length());
     isFirstOperation = false;
@@ -93,6 +97,7 @@ public class Level1 {
       currentString.setLength(0);
       currentString.append(undoStack.pop());
     }
+    isFirstOperation = true;
   }
 
   private static void performRedo() {
@@ -101,5 +106,6 @@ public class Level1 {
       currentString.setLength(0);
       currentString.append(redoStack.pop());
     }
+    isFirstOperation = true;
   }
 }
