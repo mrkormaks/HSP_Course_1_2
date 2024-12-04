@@ -29,26 +29,38 @@ public class Level1 {
   }
 
   private static int[][] destroy(int[][] grid) {
-    int H = grid.length, W = grid[0].length;
+    int H = grid.length;
+    int W = grid[0].length;
     int[][] nextGrid = new int[H][W];
-    List<int[]> toDestroy = new ArrayList<>();
+    boolean[][] toDestroy = new boolean[H][W];
+    int[] dx = {-1, 1, 0, 0};
+    int[] dy = {0, 0, -1, 1};
 
     for (int i = 0; i < H; i++) {
       for (int j = 0; j < W; j++) {
-        nextGrid[i][j] = grid[i][j] > 0 ? grid[i][j] + 1 : 0;
+        nextGrid[i][j] = grid[i][j];
+      }
+    }
+
+    for (int i = 0; i < H; i++) {
+      for (int j = 0; j < W; j++) {
         if (grid[i][j] >= 3) {
-          toDestroy.add(new int[]{i, j});
+          toDestroy[i][j] = true;
+          for (int d = 0; d < 4; d++) {
+            int ni = i + dx[d];
+            int nj = j + dy[d];
+            if (ni >= 0 && ni < H && nj >= 0 && nj < W) {
+              toDestroy[ni][nj] = true;
+            }
+          }
         }
       }
     }
 
-    for (int[] cell : toDestroy) {
-      int i = cell[0], j = cell[1];
-      nextGrid[i][j] = 0;
-      for (int[] dir : new int[][]{{-1, 0}, {1, 0}, {0, -1}, {0, 1}}) {
-        int ni = i + dir[0], nj = j + dir[1];
-        if (ni >= 0 && ni < H && nj >= 0 && nj < W) {
-          nextGrid[ni][nj] = 0;
+    for (int i = 0; i < H; i++) {
+      for (int j = 0; j < W; j++) {
+        if (toDestroy[i][j]) {
+          nextGrid[i][j] = 0;
         }
       }
     }
