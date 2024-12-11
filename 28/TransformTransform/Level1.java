@@ -1,4 +1,5 @@
-import java.util.Stack;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Level1 {
   public static boolean TransformTransform(int[] A, int N) {
