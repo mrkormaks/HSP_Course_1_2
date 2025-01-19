@@ -88,6 +88,18 @@ public class LinkedListTest {
   }
 
   @Test
+  public void testRemoveFirstElement() {
+    Node node1 = new Node(1);
+    Node node2 = new Node(2);
+    list.addInTail(node1);
+    list.addInTail(node2);
+    assertTrue(list.remove(1));
+    assertEquals(node2, list.head);
+    assertEquals(node2, list.tail);
+    assertNull(list.tail.next);
+  }
+
+  @Test
   public void testRemoveMiddleElement() {
     Node node1 = new Node(1);
     Node node2 = new Node(2);
@@ -99,6 +111,18 @@ public class LinkedListTest {
     assertEquals(node1, list.head);
     assertEquals(node3, list.head.next);
     assertEquals(node3, list.tail);
+  }
+
+  @Test
+  public void testRemoveLastElement() {
+    Node node1 = new Node(1);
+    Node node2 = new Node(2);
+    list.addInTail(node1);
+    list.addInTail(node2);
+    assertTrue(list.remove(2));
+    assertEquals(node1, list.head);
+    assertEquals(node1, list.tail);
+    assertNull(list.tail.next);
   }
 
   @Test
@@ -130,6 +154,67 @@ public class LinkedListTest {
     list.removeAll(1);
     assertNull(list.head);
     assertNull(list.tail);
+  }
+
+  @Test
+  public void testRemoveAllMixedElements() {
+    Node node1 = new Node(1);
+    Node node2 = new Node(2);
+    Node node3 = new Node(1);
+    Node node4 = new Node(3);
+    list.addInTail(node1);
+    list.addInTail(node2);
+    list.addInTail(node3);
+    list.addInTail(node4);
+    list.removeAll(1);
+    assertEquals(node2, list.head);
+    assertEquals(node4, list.tail);
+    assertEquals(node4, node2.next);
+    assertNull(node4.next);
+  }
+
+  @Test
+  public void testClearEmptyList() {
+    list.clear();
+    assertNull(list.head);
+    assertNull(list.tail);
+  }
+
+  @Test
+  public void testClearNonEmptyList() {
+    list.addInTail(new Node(1));
+    list.addInTail(new Node(2));
+    list.clear();
+    assertNull(list.head);
+    assertNull(list.tail);
+  }
+
+  @Test
+  public void testCountEmptyList() {
+    assertEquals(0, list.count());
+  }
+
+  @Test
+  public void testCountSingleElement() {
+    list.addInTail(new Node(1));
+    assertEquals(1, list.count());
+  }
+
+  @Test
+  public void testCountMultipleElements() {
+    list.addInTail(new Node(1));
+    list.addInTail(new Node(2));
+    list.addInTail(new Node(3));
+    assertEquals(3, list.count());
+  }
+
+  @Test
+  public void testInsertAfterInEmptyList() {
+    Node node = new Node(1);
+    list.insertAfter(null, node);
+    assertEquals(node, list.head);
+    assertEquals(node, list.tail);
+    assertNull(node.next);
   }
 
   @Test
@@ -211,6 +296,25 @@ public class LinkedListTest {
     list2.addInTail(new Node(3));
     LinkedList result = LinkedList.sumLists(list1, list2);
     assertNull(result);
+  }
+
+  @Test
+  public void testSumListsWithMultipleElements() {
+    LinkedList list1 = new LinkedList();
+    LinkedList list2 = new LinkedList();
+    list1.addInTail(new Node(1));
+    list1.addInTail(new Node(2));
+    list1.addInTail(new Node(3));
+    
+    list2.addInTail(new Node(4));
+    list2.addInTail(new Node(5));
+    list2.addInTail(new Node(6));
+    
+    LinkedList result = LinkedList.sumLists(list1, list2);
+    assertEquals(5, result.head.value);
+    assertEquals(7, result.head.next.value);
+    assertEquals(9, result.head.next.next.value);
+    assertNull(result.head.next.next.next);
   }
 }
 
