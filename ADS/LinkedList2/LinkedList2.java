@@ -20,32 +20,26 @@ public class LinkedList2 {
   }
 
   public Node find(int _value) {
-    Node current = head;
-    while (current != null) {
+    for (Node current = head; current != null; current = current.next) {
       if (current.value == _value) {
         return current;
       }
-      current = current.next;
     }
     return null;
   }
 
   public ArrayList<Node> findAll(int _value) {
     ArrayList<Node> nodes = new ArrayList<>();
-    Node current = head;
-    while (current != null) {
+    for (Node current = head; current != null; current = current.next) {
       if (current.value == _value) {
         nodes.add(current);
       }
-      current = current.next;
     }
     return nodes;
   }
 
   public boolean remove(int _value) {
-    Node current = head;
-
-    while (current != null) {
+    for (Node current = head; current != null; current = current.next) {
       if (current.value == _value) {
         if (current.prev != null) {
           current.prev.next = current.next;
@@ -60,15 +54,12 @@ public class LinkedList2 {
         }
         return true;
       }
-      current = current.next;
     }
     return false;
   }
 
   public void removeAll(int _value) {
-    Node current = head;
-
-    while (current != null) {
+    for (Node current = head; current != null; current = current.next) {
       Node next = current.next;
       if (current.value == _value) {
         if (current.prev != null) {
@@ -83,7 +74,6 @@ public class LinkedList2 {
           tail = current.prev;
         }
       }
-      current = next;
     }
   }
 
@@ -124,14 +114,4 @@ public class LinkedList2 {
   }
 }
 
-class Node {
-  public int value;
-  public Node next;
-  public Node prev;
 
-  public Node(int _value) {
-    value = _value;
-    next = null;
-    prev = null;
-  }
-}
