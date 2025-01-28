@@ -10,12 +10,24 @@ public void reverse() {
 }
 
 public boolean hasCycle() {
-  for (Node slow = head, fast = head; fast != null && fast.next != null; slow = slow.next, fast = fast.next.next) {
-    if (slow == fast) {
-      return true;
-    }
+  if (head == null) {
+    return false;
   }
-  return false;
+
+  int length = 0;
+  for (Node current = head; current != null; current = current.next) {
+    length++;
+  }
+
+  Node current = head;
+  for (int i = 0; i < length; i++) {
+    if (current == null) {
+      return false;
+    }
+    current = current.next;
+  }
+
+  return true;
 }
 
 public void sort() {
@@ -35,6 +47,13 @@ public void sort() {
 }
 
 public static LinkedList2 mergeSortedLists(LinkedList2 list1, LinkedList2 list2) {
+  if (list1 == null || list2 == null) {
+    throw new IllegalArgumentException("Lists cannot be null");
+  }
+
+  list1.sort();
+  list2.sort();
+
   LinkedList2 result = new LinkedList2();
 
   for (Node current1 = list1.head, current2 = list2.head; current1 != null || current2 != null;) {
@@ -50,21 +69,32 @@ public static LinkedList2 mergeSortedLists(LinkedList2 list1, LinkedList2 list2)
   return result;
 }
 
-public void addDummyNodes() {
-  Node dummyHead = new Node(0);
-  Node dummyTail = new Node(0);
+public class DummyLinkedList2 {
+  private Node dummyHead;
+  private Node dummyTail;
 
-  dummyHead.next = head;
-  if (head != null) {
-    head.prev = dummyHead;
-  }
-  dummyTail.prev = tail;
-  if (tail != null) {
-    tail.next = dummyTail;
+  public DummyLinkedList2() {
+    dummyHead = new Node(0);
+    dummyTail = new Node(0);
+    dummyHead.next = dummyTail;
+    dummyTail.prev = dummyHead;
   }
 
-  head = dummyHead;
-  tail = dummyTail;
+  public void addInTail(Node node) {
+    Node lastRealNode = dummyTail.prev;
+    lastRealNode.next = node;
+    node.prev = lastRealNode;
+    node.next = dummyTail;
+    dummyTail.prev = node;
+  }
+
+  public Node getHead() {
+    return dummyHead.next == dummyTail ? null : dummyHead.next;
+  }
+
+  public Node getTail() {
+    return dummyTail.prev == dummyHead ? null : dummyTail.prev;
+  }
 }
 
 
