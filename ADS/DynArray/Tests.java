@@ -3,12 +3,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class DynArrayTest {
   private DynArray<Integer> dynArray;
+  private DynamicArray<Integer> array;
+  private DynamicMultiArray<Integer> multiArray;
 
   @BeforeEach
   void setUp() {
     dynArray = new DynArray<>(Integer.class);
+    array = new DynamicArray<>(Integer.class, 2);
+    multiArray = new DynamicMultiArray<>(Integer.class, 3, 3, 3);
   }
 
+  // Tests for DynArray
   @Test
   void testAppendAndGetItem() {
     dynArray.append(10);
@@ -66,6 +71,51 @@ class DynArrayTest {
   @Test
   void testRemoveOutOfBounds() {
     assertThrows(IndexOutOfBoundsException.class, () -> dynArray.remove(0));
+  }
+
+  // Test for DynamicArray (banker's algorithm)
+  @Test
+  void testAppendAndResize() {
+    array.append(10);
+    array.append(20);
+    array.append(30);
+    assertEquals(10, array.getItem(0));
+    assertEquals(20, array.getItem(1));
+    assertEquals(30, array.getItem(2));
+  }
+
+  @Test
+  void testInsert() {
+    array.append(10);
+    array.append(30);
+    array.insert(20, 1);
+    assertEquals(10, array.getItem(0));
+    assertEquals(20, array.getItem(1));
+    assertEquals(30, array.getItem(2));
+  }
+
+  @Test
+  void testRemove() {
+    array.append(10);
+    array.append(20);
+    array.append(30);
+    array.remove(1);
+    assertEquals(10, array.getItem(0));
+    assertEquals(30, array.getItem(1));
+  }
+
+  // Tests for MultiArray
+  @Test
+  void testInsertAndRetrieve() {
+      multiArray.insert(new int[]{1, 2, 2}, 42);
+      assertEquals(42, multiArray.retrieve(new int[]{1, 2, 2}));
+  }
+
+  @Test
+  void testRemoveFromMultiArray() {
+      multiArray.insert(new int[]{1, 1, 1}, 99);
+      multiArray.remove(new int[]{1, 1, 1});
+      assertThrows(IndexOutOfBoundsException.class, () -> multiArray.retrieve(new int[]{1, 1, 1}));
   }
 }
 
