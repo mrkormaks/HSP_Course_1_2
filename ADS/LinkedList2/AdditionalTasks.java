@@ -14,20 +14,17 @@ public boolean hasCycle() {
     return false;
   }
 
-  int length = 0;
+  int steps = 0;
+  int maxSteps = count() * 2;
+  
   for (Node current = head; current != null; current = current.next) {
-    length++;
-  }
-
-  Node current = head;
-  for (int i = 0; i < length; i++) {
-    if (current == null) {
-      return false;
+    steps++;
+    if (steps > maxSteps) {
+      return true;
     }
-    current = current.next;
   }
 
-  return true;
+  return false;
 }
 
 public void sort() {
@@ -69,17 +66,26 @@ public static LinkedList2 mergeSortedLists(LinkedList2 list1, LinkedList2 list2)
   return result;
 }
 
-public class DummyLinkedList2 {
-  private Node dummyHead;
-  private Node dummyTail;
+class Dummy extends Node {
+  public Dummy() {
+    super(0);
+  }
+}
+
+class DummyLinkedList2 extends LinkedList2 {
+  private Dummy dummyHead;
+  private Dummy dummyTail;
 
   public DummyLinkedList2() {
-    dummyHead = new Node(0);
-    dummyTail = new Node(0);
+    dummyHead = new Dummy();
+    dummyTail = new Dummy();
     dummyHead.next = dummyTail;
     dummyTail.prev = dummyHead;
+    head = dummyHead;
+    tail = dummyTail;
   }
 
+  @Override
   public void addInTail(Node node) {
     Node lastRealNode = dummyTail.prev;
     lastRealNode.next = node;
@@ -88,12 +94,58 @@ public class DummyLinkedList2 {
     dummyTail.prev = node;
   }
 
-  public Node getHead() {
-    return dummyHead.next == dummyTail ? null : dummyHead.next;
+  @Override
+  public Node find(int _value) {
+    for (Node current = dummyHead.next; current != dummyTail; current = current.next) {
+      if (!(current instanceof Dummy) && current.value == _value) {
+        return current;
+      }
+    }
+    return null;
   }
 
-  public Node getTail() {
-    return dummyTail.prev == dummyHead ? null : dummyTail.prev;
+  @Override
+  public ArrayList<Node> findAll(int _value) {
+    ArrayList<Node> nodes = new ArrayList<>();
+    for (Node current = dummyHead.next; current != dummyTail; current = current.next) {
+      if (!(current instanceof Dummy) && current.value == _value) {
+        nodes.add(current);
+      }
+    }
+    return nodes;
+  }
+
+  @Override
+  public boolean remove(int _value) {
+    for (Node current = dummyHead.next; current != dummyTail; current = current.next) {
+      if (!(current instanceof Dummy) && current.value == _value) {
+        current.prev.next = current.next;
+        current.next.prev = current.prev;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @Override
+  public void removeAll(int _value) {
+    for (Node current = dummyHead.next; current != dummyTail; current = current.next) {
+      if (!(current instanceof Dummy) && current.value == _value) {
+        current.prev.next = current.next;
+        current.next.prev = current.prev;
+      }
+    }
+  }
+
+  @Override
+  public int count() {
+    int count = 0;
+    for (Node current = dummyHead.next; current != dummyTail; current = current.next) {
+      if (!(current instanceof Dummy)) {
+        count++;
+      }
+    }
+    return count;
   }
 }
 

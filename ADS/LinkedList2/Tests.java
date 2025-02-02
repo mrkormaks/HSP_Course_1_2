@@ -250,6 +250,7 @@ class LinkedList2Test {
     DummyLinkedList2 list = new DummyLinkedList2();
     assertNull(list.getHead());
     assertNull(list.getTail());
+    assertEquals(0, list.count());
   }
   
   @Test
@@ -257,10 +258,97 @@ class LinkedList2Test {
     DummyLinkedList2 list = new DummyLinkedList2();
     list.addInTail(new Node(1));
     list.addInTail(new Node(2));
+  
     assertEquals(1, list.getHead().value);
     assertEquals(2, list.getTail().value);
     assertNull(list.getHead().prev);
     assertNull(list.getTail().next);
+    assertEquals(2, list.count());
+  }
+  
+  @Test
+  void testDummyLinkedList2RemoveElement() {
+    DummyLinkedList2 list = new DummyLinkedList2();
+    list.addInTail(new Node(1));
+    list.addInTail(new Node(2));
+    list.addInTail(new Node(3));
+  
+    assertTrue(list.remove(2));
+    assertEquals(2, list.count());
+    assertEquals(1, list.getHead().value);
+    assertEquals(3, list.getTail().value);
+  
+    assertFalse(list.remove(4));
+    assertEquals(2, list.count());
+  }
+  
+  @Test
+  void testDummyLinkedList2FindElement() {
+    DummyLinkedList2 list = new DummyLinkedList2();
+    list.addInTail(new Node(5));
+    list.addInTail(new Node(10));
+    list.addInTail(new Node(15));
+  
+    Node foundNode = list.find(10);
+    assertNotNull(foundNode);
+    assertEquals(10, foundNode.value);
+  
+    assertNull(list.find(20));
+  }
+  
+  @Test
+  void testDummyLinkedList2RemoveAllElements() {
+    DummyLinkedList2 list = new DummyLinkedList2();
+    list.addInTail(new Node(3));
+    list.addInTail(new Node(3));
+    list.addInTail(new Node(3));
+  
+    list.removeAll(3);
+    assertEquals(0, list.count());
+    assertNull(list.getHead());
+    assertNull(list.getTail());
+  }
+  
+  @Test
+  void testDummyLinkedList2InsertAfter() {
+    DummyLinkedList2 list = new DummyLinkedList2();
+    Node first = new Node(1);
+    Node second = new Node(2);
+    list.addInTail(first);
+  
+    list.insertAfter(first, second);
+    assertEquals(2, list.count());
+    assertEquals(2, list.getTail().value);
+  
+    Node third = new Node(3);
+    list.insertAfter(second, third);
+    assertEquals(3, list.count());
+    assertEquals(3, list.getTail().value);
+  }
+  
+  @Test
+  void testDummyLinkedList2WithDummyNodes() {
+    DummyLinkedList2 list = new DummyLinkedList2();
+    list.addInTail(new Node(1));
+    list.addInTail(new Node(2));
+    list.addInTail(new Node(3));
+  
+    assertEquals(1, list.getHead().value);
+    assertEquals(3, list.getTail().value);
+    assertEquals(3, list.count());
+  }
+  
+  @Test
+  void testDummyLinkedList2Clear() {
+    DummyLinkedList2 list = new DummyLinkedList2();
+    list.addInTail(new Node(1));
+    list.addInTail(new Node(2));
+    list.addInTail(new Node(3));
+  
+    list.clear();
+    assertNull(list.getHead());
+    assertNull(list.getTail());
+    assertEquals(0, list.count());
   }
 }
 
