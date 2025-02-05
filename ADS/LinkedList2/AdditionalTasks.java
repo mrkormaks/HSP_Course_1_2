@@ -94,7 +94,7 @@ class DummyLinkedList2 extends LinkedList2 {
   @Override
   public Node find(int _value) {
     for (Node current = dummy.next; current != dummy; current = current.next) {
-      if (!(current instanceof Dummy) && current.value == _value) {
+      if (current.value == _value) {
         return current;
       }
     }
@@ -105,7 +105,7 @@ class DummyLinkedList2 extends LinkedList2 {
   public ArrayList<Node> findAll(int _value) {
     ArrayList<Node> nodes = new ArrayList<>();
     for (Node current = dummy.next; current != dummy; current = current.next) {
-      if (!(current instanceof Dummy) && current.value == _value) {
+      if (current.value == _value) {
         nodes.add(current);
       }
     }
@@ -115,7 +115,7 @@ class DummyLinkedList2 extends LinkedList2 {
   @Override
   public boolean remove(int _value) {
     for (Node current = dummy.next; current != dummy; current = current.next) {
-      if (!(current instanceof Dummy) && current.value == _value) {
+      if (current.value == _value) {
         current.prev.next = current.next;
         current.next.prev = current.prev;
         return true;
@@ -127,7 +127,7 @@ class DummyLinkedList2 extends LinkedList2 {
   @Override
   public void removeAll(int _value) {
     for (Node current = dummy.next; current != dummy; current = current.next) {
-      if (!(current instanceof Dummy) && current.value == _value) {
+      if (current.value == _value) {
         current.prev.next = current.next;
         current.next.prev = current.prev;
       }
@@ -138,12 +138,11 @@ class DummyLinkedList2 extends LinkedList2 {
   public int count() {
     int count = 0;
     for (Node current = dummy.next; current != dummy; current = current.next) {
-      if (!(current instanceof Dummy)) {
-        count++;
-      }
+      count++;
     }
     return count;
   }
 }
+
 
 
