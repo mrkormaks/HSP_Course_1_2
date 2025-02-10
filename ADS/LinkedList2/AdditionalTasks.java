@@ -74,6 +74,7 @@ class Dummy extends Node {
 
 class DummyLinkedList2 extends LinkedList2 {
   private Dummy dummy;
+  private int size;
 
   public DummyLinkedList2() {
     dummy = new Dummy();
@@ -81,6 +82,7 @@ class DummyLinkedList2 extends LinkedList2 {
     dummy.prev = dummy;
     head = dummy;
     tail = dummy;
+    size = 0;
   }
 
   @Override
@@ -89,6 +91,7 @@ class DummyLinkedList2 extends LinkedList2 {
     node.prev = dummy.prev;
     dummy.prev.next = node;
     dummy.prev = node;
+    size++;
   }
 
   @Override
@@ -118,6 +121,7 @@ class DummyLinkedList2 extends LinkedList2 {
       if (current.value == _value) {
         current.prev.next = current.next;
         current.next.prev = current.prev;
+        size--;
         return true;
       }
     }
@@ -126,23 +130,24 @@ class DummyLinkedList2 extends LinkedList2 {
 
   @Override
   public void removeAll(int _value) {
-    for (Node current = dummy.next; current != dummy; current = current.next) {
+    Node current = dummy.next;
+    while (current != dummy) {
+      Node next = current.next;
       if (current.value == _value) {
         current.prev.next = current.next;
         current.next.prev = current.prev;
+        size--;
       }
+      current = next;
     }
   }
 
   @Override
   public int count() {
-    int count = 0;
-    for (Node current = dummy.next; current != dummy; current = current.next) {
-      count++;
-    }
-    return count;
+    return size;
   }
 }
+
 
 
 

@@ -1,22 +1,25 @@
+import java.util.ArrayList;
+
 public class LinkedList2 {
   public Node head;
   public Node tail;
+  private int size;
 
   public LinkedList2() {
     head = null;
     tail = null;
+    size = 0;
   }
 
   public void addInTail(Node _item) {
     if (head == null) {
-      this.head = _item;
-      this.head.next = null;
-      this.head.prev = null;
+      head = tail = _item;
     } else {
-      this.tail.next = _item;
+      tail.next = _item;
       _item.prev = tail;
+      tail = _item;
     }
-    this.tail = _item;
+    size++;
   }
 
   public Node find(int _value) {
@@ -52,6 +55,8 @@ public class LinkedList2 {
         } else {
           tail = current.prev;
         }
+
+        size--;
         return true;
       }
     }
@@ -59,7 +64,8 @@ public class LinkedList2 {
   }
 
   public void removeAll(int _value) {
-    for (Node current = head; current != null; current = current.next) {
+    Node current = head;
+    while (current != null) {
       Node next = current.next;
       if (current.value == _value) {
         if (current.prev != null) {
@@ -73,21 +79,21 @@ public class LinkedList2 {
         } else {
           tail = current.prev;
         }
+
+        size--;
       }
+      current = next;
     }
   }
 
   public void clear() {
     head = null;
     tail = null;
+    size = 0;
   }
 
   public int count() {
-    int count = 0;
-    for (Node current = head; current != null; current = current.next) {
-      count++;
-    }
-    return count;
+    return size;
   }
 
   public void insertAfter(Node _nodeAfter, Node _nodeToInsert) {
@@ -111,18 +117,17 @@ public class LinkedList2 {
         tail = _nodeToInsert;
       }
     }
+    size++;
   }
 }
 
-class Node
-{
+class Node {
   public int value;
   public Node next;
   public Node prev;
-  
-  public Node(int _value) 
-  { 
-    value = _value; 
+
+  public Node(int _value) {
+    value = _value;
     next = null;
     prev = null;
   }
