@@ -11,7 +11,13 @@ class DynamicArray<T> extends DynArray<T> {
     if (new_capacity < 16) {
       new_capacity = 16;
     }
-    new_capacity = capacity + growthFactor;
+
+    if (new_capacity <= capacity) {
+      return;
+    }
+     
+    new_capacity = Math.max(new_capacity, capacity + growthFactor);
+    
     super.makeArray(new_capacity);
   }
 }
